@@ -36,7 +36,6 @@ def validate(model,device,dataset, min_length, threshold,nprocesss=1, batch_size
 
             output= model(X,threshold)
             del X
-            # 将模型输出转换为类别概率
             output = output.float()
             loss+=criterion(output,Y_int64)
             output = F.softmax(output, dim=1)
