@@ -26,9 +26,6 @@ def validate(model,device,dataset, min_length, threshold,nprocesss=1, batch_size
     criterion=nn.CrossEntropyLoss()
     with torch.no_grad():
 
-        # accuracy, sensitivity, specificity = evaluate_model(model, sequences_and_labels, min_length, device,threshold)
-
-
         for data in tqdm(dataset,ncols=80):
             X=data['data'].to(device)
             Y=data['labels'].to(device)
@@ -52,16 +49,12 @@ def validate(model,device,dataset, min_length, threshold,nprocesss=1, batch_size
     ground_truths=np.asarray(ground_truths)
     predictions=np.asarray(predictions)
     outputs=np.asarray(outputs)
-    #print(predictions)
-    #print(ground_truths)
-    #score=metrics.cohen_kappa_score(ground_truths,predictions,weights='quadratic')
     val_acc=metric.accuracy(predictions,ground_truths)
     auc=metrics.roc_auc_score(ground_truths,outputs[:,1])
     val_sens=metric.sensitivity(predictions,ground_truths)
     val_spec=metric.specificity(predictions,ground_truths)
     print('Val accuracy: {}, Val Loss: {}'.format(val_acc,val_loss))
     return val_loss,auc,val_acc,val_sens,val_spec
-    # return val_loss,auc,val_acc,val_sens,val_spec
 
 class Dataset(torch.utils.data.Dataset):
     def __init__(self, sequences, labels):
